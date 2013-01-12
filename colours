@@ -1,386 +1,79 @@
-acid
-adobe
-algae
-almost
-amber
-amethyst
-apple
-apricot
-aqua
-aquamarine
-army
-asparagus
-aubergine
-auburn
-avocado
-azul
-azure
-baby
-banana
-barbie
-barf
-barney
-battleship
-beige
-berry
-bile
-black
-bland
-blood
-blue
-blueberry
-bluegreen
-bluegrey
-bluepurple
-bluey
-bluish
-blurple
-blush
-booger
-bordeaux
-boring
-bottle
-brick
-bright
-british
-bronze
-brown
-brownish
-browny
-bruise
-bubble
-bubblegum
-buff
-burgundy
-burnt
-burple
-butter
-butterscotch
-cadet
-camel
-camo
-camouflage
-canary
-candy
-caramel
-carmine
-carnation
-carolina
-celadon
-celery
-cement
-cerise
-cerulean
-charcoal
-chartreuse
-cherry
-chestnut
-chocolate
-cinnamon
-claret
-clay
-clear
-cloudy
-cobalt
-cocoa
-coffee
-cool
-copper
-coral
-cornflower
-cranberry
-cream
-creme
-crimson
-custard
-cyan
-dandelion
-dark
-darkblue
-darkgreen
-darkish
-deep
-denim
-desert
-diarrhea
-dirt
-dirty
-dodger
-drab
-dried
-duck
-dull
-dusk
-dusky
-dust
-dusty
-earth
-easter
-ecru
-egg
-eggplant
-eggshell
-electric
-emerald
-evergreen
-faded
-fawn
-fern
-fire
-flat
-fluorescent
-fluro
-foam
-forest
-forrest
-french
-fresh
-frog
-fuchsia
-gold
-golden
-goldenrod
-grape
-grapefruit
-grass
-grassy
-green
-greenblue
-greenish
-greeny
-greenyellow
-grey
-greyblue
-greygreen
-greyish
-gross
-gunmetal
-hazel
-heather
-heliotrope
-highlighter
-hospital
-hot
-hunter
-ice
-icky
-indian
-indigo
-iris
-irish
-ivory
-jade
-jungle
-kelley
-kelly
-kermit
-key
-khaki
-kiwi
-lavender
-lawn
-leaf
-leafy
-leather
-lemon
-lichen
-light
-lightblue
-lighter
-lightgreen
-lightish
-lilac
-liliac
-lime
-lipstick
-macaroni
-magenta
-mahogany
-maize
-mango
-manilla
-marigold
-marine
-maroon
-mauve
-medium
-melon
-merlot
-metallic
-mid
-midnight
-military
-milk
-mint
-minty
-mocha
-moss
-mossy
-mud
-muddy
-mulberry
-murky
-mushroom
-mustard
-muted
-nasty
-navy
-neon
-nice
-night
-ocean
-ocher
-ochre
-ocre
-off
-old
-olive
-orange
-orangeish
-orangered
-orangey
-orangish
-orchid
-pale
-parchment
-pastel
-pea
-peach
-peachy
-peacock
-pear
-periwinkle
-perrywinkle
-petrol
-pig
-pine
-pink
-pinkish
-pinkpurple
-pinky
-piss
-pistachio
-plum
-poison
-poo
-poop
-powder
-primary
-prussian
-puce
-puke
-pumpkin
-pure
-purple
-purpleblue
-purpleish
-purplepink
-purpley
-purplish
-purply
-putty
-racing
-radioactive
-raspberry
-raw
-really
-red
-reddish
-reddy
-rich
-robin
-robin's
-rosa
-rose
-rosy
-rouge
-royal
-ruby
-russet
-rust
-rusty
-saffron
-sage
-salmon
-sand
-sandstone
-sandy
-sap
-sapphire
-scarlet
-sea
-seafoam
-seaweed
-sepia
-shamrock
-shit
-shocking
-sick
-sickly
-sienna
-silver
-sky
-slate
-slime
-snot
-soft
-spearmint
-spring
-spruce
-squash
-steel
-stone
-stormy
-straw
-strawberry
-strong
-sun
-sunflower
-sunny
-sunshine
-swamp
-tan
-tangerine
-taupe
-tea
-teal
-tealish
-terra
-terracota
-terracotta
-tiffany
-tomato
-topaz
-toupe
-toxic
-tree
-true
-turquoise
-turtle
-twilight
-ugly
-ultramarine
-umber
-velvet
-vermillion
-very
-vibrant
-violet
-viridian
-vivid
-vomit
-warm
-washed
-water
-watermelon
-weird
-wheat
-white
-windows
-wine
-wintergreen
-wisteria
-yellow
-yellowgreen
-yellowish
-yellowy
+Amaranth		#E52B50
+Amber				#FFBF00
+Apricot					#FBCEB1
+Aquamarine					#7FFFD4
+Azure							#007FFF
+Baby blue							#89CFF0
+Beige									#F5F5DC
+Black										#000000
+Blue											#0000FF
+Blue-green											#0095B6
+Blue-violet												#8A2BE2
+Blush														#DE5D83
+Bronze															#CD7F32
+Brown															 #964B00
+Burgundy														  #800020
+Byzantium														   #702963
+Carmine															    #960018
+Cerise															     #DE3163
+Cerulean														      #007BA7
+Champagne														       #F7E7CE
+Chartreuse green													        #7FFF00
+Chocolate  															#7B3F00
+Coffee																 #6F4E37
+Copper																  #B87333
+Coral																   #F88379
+Crimson																    #DC143C
+Cyan																     #00FFFF
+Desert sand															      #EDC9AF
+Electric blue															       #7DF9FF
+Erin	 															       #00FF3F
+Gold																        #FFD700
+Gray																	 #808080
+Green																	  #00FF00
+Harlequin																   #3FFF00
+Indigo																	    #4B0082
+Ivory																	     #FFFFF0
+Jade																	      #00A86B
+Jungle green																       #29AB87
+Lavender																        #B57EDC
+Lemon																		 #FFF700
+Lilac																		  #C8A2C8
+Lime																		   #BFFF00
+Magenta																		    #FF00FF
+Magenta rose																	     #FF00AF
+Maroon																		     #800000
+Mauve																		      #E0B0FF
+Navy blue																	       #000080
+Olive																		        #808000
+Orange																			 #FFA500
+Orange-red																		  #FF4500
+Orchid																			   #DA70D6
+Peach																			    #FFE5B4
+Pear																			     #D1E231
+Periwinkle																		      #CCCCFF
+Persian blue																		       #1C39BB
+Pink																			       #FFC0CB
+Plum																			        #8E4585
+Prussian blue																			 #003153
+Puce	 																			 #CC8899
+Purple																				  #800080
+Raspberry																			   #E30B5C
+Red																				    #FF0000
+Red-violet																			     #C71585
+Rose																				      #FF007F
+Salmon																				       #FA8072
+Sapphire																			        #0F52BA
+Scarlet																					 #FF2400
+Silver																					  #C0C0C0
+Slate gray																				   #708090
+Spring bud																				    #A7FC00
+Spring green																				     #00FF7F
+Tan    																					     #D2B48C
+Taupe																					      #483C32
+Teal																					       #008080
+Turquoise																				        #40E0D0
+Violet																						 #EE82EE
+Viridian																					  #40826D
+White																						   #FFFFFF
+Yellow

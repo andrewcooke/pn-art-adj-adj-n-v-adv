@@ -3,7 +3,9 @@
 import fileinput
 import gc
 from fastcomp import compare
+import sys
 
+sys.setrecursionlimit(10000)
 
 class BKtree:
 
@@ -83,5 +85,6 @@ def adapter(a, b):
         return delta
 
 if __name__ == '__main__':
+    
     for word in BKtree(map(lambda x: x.strip(), fileinput.input()), adapter, 2).nodes.keys():
         print(word)
