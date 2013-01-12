@@ -17,7 +17,7 @@ class Words:
             ['names', 'adjectives', 'colours', 'animals', 'verbs', 'adverbs'])
 
     def _new_sentence(self):
-        line = "%s the %s %s %s %s %s." u% tmap(choice, self._words)
+        line = "%s the %s %s %s %s %s." % tmap(choice, self._words)
         return line[0].upper() + line[1:]
 
     @to_list
