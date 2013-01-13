@@ -22,21 +22,19 @@ It is selected from a pool approximately 52 bits in size.</p>
 <p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.</p>
 ''',)}
 
-    def _static_page(self, html):
-        message = '''<!DOCTYPE html>
+    def _format(self, body):
+        return '''<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
 </head>
 <body>
 %s
-</body>''' % html
-        def render(handler):
-            handler.send_response(200)
-            handler.send_header('Content-type', 'text-html')
-            handler.end_headers()
-            handler.wfile.write(message.encode('utf-8'))
-        return render
+</body>''' % body
+
+    def _static_page(self, body):
+        message = self._format(body)
+        return lambda handler: handler.send(message)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -49,15 +47,27 @@ class Handler(BaseHTTPRequestHandler):
         else:
             try:
                 self._lookup(self.server._sentences[self.path])
-            except ValueError:
+            except KeyError:
                 if self.path:
-                    self.not_found()
+                    self._not_found()
                 else:
-                    self.current()
+                    self._current()
+
+    def send(self, html):
+        self.send_response(200)
+        self.send_header('Content-type', 'text-html')
+        self.end_headers()
+        self.wfile.write(html.encode('utf-8'))
 
     def _lookup(self, data):
         start, end, sentence = data
+        self.send(self.server._format(sentence))
 
+    def _current(self):
+        self.send(self.server._format('now'))
+
+    def _not_found(self):
+        self.send_response_only(404)
 
 
 if __name__ == '__main__':

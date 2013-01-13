@@ -40,6 +40,9 @@ class Sentences:
     def __len__(self):
         return len(self._sentences)
 
+    def __getitem__(self, item):
+        return self._sentences[self._key(item)]
+
     @synchronized(WRITE_LOCK)
     def add(self, sentence):
         key = self._key(sentence)
