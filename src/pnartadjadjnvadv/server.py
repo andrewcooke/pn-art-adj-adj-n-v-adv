@@ -26,7 +26,6 @@ It is selected from a pool approximately 52 bits in size.</p>
         return '''<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
 </head>
 <body>
 %s
@@ -55,7 +54,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def send(self, html):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
         self.wfile.write(html.encode('utf-8'))
 
