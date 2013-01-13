@@ -8,8 +8,19 @@ def to_list(func):
         return list(func(*args, **kargs))
     return wrapper
 
-def lmap(f, args):
-    return list(map(f, args))
+def lmap(func, args):
+    return list(map(func, args))
 
-def tmap(f, args):
-    return tuple(map(f, args))
+def tmap(func, args):
+    return tuple(map(func, args))
+
+# http://code.activestate.com/recipes/465057-basic-synchronization-decorator/
+def synchronized(lock):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kargs):
+            lock.acquire()
+            try: return func(*args, **kargs)
+            finally: lock.release()
+        return wrapper
+    return decorator
