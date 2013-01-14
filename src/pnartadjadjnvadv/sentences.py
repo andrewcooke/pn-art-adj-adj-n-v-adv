@@ -8,8 +8,10 @@ from pnartadjadjnvadv.utils import synchronized
 
 
 WRITE_LOCK = Lock()
-
 NON_LETTERS = compile(r'[^a-z]+')
+PERIOD = 50000
+PERIOD_ERROR = 10000
+
 
 def hash_sha_256(sentence):
     return SHA256.new(sentence.encode('utf8')).digest()
@@ -25,8 +27,8 @@ class Sentences:
     def _read(self):
         extended = list(self._shuttle)
         extended.sort(key=lambda ses: ses[0])
-        previous = extended[-1][0] if extended else 0
-        extended.append((0, None))
+        previous = extended[-1] if extended else (None, None)
+        extended.append((None, None))
         return previous, \
                {self._key(sentence): (start, end, sentence)
                 for ((start, sentence), (end, _)) in zip(extended, extended[1:])}
@@ -50,4 +52,7 @@ class Sentences:
         now = time()
         self._shuttle.append(now, sentence)
         self._sentences[key] = (now, sentence)
-        self._previous = now
+        self._previous = (now, sentence)
+
+    def current_sentence(self):
+        return self._previous[1]
