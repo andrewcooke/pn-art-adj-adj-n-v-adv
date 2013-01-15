@@ -8,7 +8,8 @@ from pnartadjadjnvadv.utils import synchronized
 
 
 WRITE_LOCK = Lock()
-NON_LETTERS = compile(r'[^a-z]+')
+NON_LETTERS = compile(r'[^a-z\s]+')
+SEPARATORS = compile(r'[-\s]+')
 PERIOD = 50000
 PERIOD_ERROR = 10000
 
@@ -34,7 +35,9 @@ class Sentences:
                 for ((start, sentence), (end, _)) in zip(extended, extended[1:])}
 
     def _key(self, sentence):
-        return self._hash(NON_LETTERS.sub('', sentence.lower()))
+        single_spaced = SEPARATORS.sub(' ', sentence.strip().lower())
+        letters_and_spaces = NON_LETTERS.sub('', single_spaced)
+        return self._hash(letters_and_spaces)
 
     def __contains__(self, item):
         return self._key(item) in self._sentences

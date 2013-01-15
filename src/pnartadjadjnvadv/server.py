@@ -1,5 +1,8 @@
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import quote, unquote
+from os import chdir
+from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHandler
+from threading import Thread
 
 from pnartadjadjnvadv.sentences import Sentences, PERIOD
 from pnartadjadjnvadv.words import Words
@@ -20,7 +23,7 @@ class Server(HTTPServer):
 <p>A new timestamp is generated approximately every {period:d} seconds, posted to
 <a href="">Twitter</a>, and archived on
 <a href="">GitHub</a>.
-It is selected from a pool approximately 52 bits in size.</p>
+Sentences are selected from a pool 52 bits in size.</p>
 <p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.</p>
 ''', title='About')}
 
@@ -32,6 +35,7 @@ It is selected from a pool approximately 52 bits in size.</p>
 <head>
 <title>{title!s}</title>
 <link rel="stylesheet" type="text/css" href="{static!s}/style.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="{static!s}/epoch.js"></script>
 </head>
 <body>
@@ -47,15 +51,15 @@ It is selected from a pool approximately 52 bits in size.</p>
 class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        if self.path.startswith('/'): self.path = self.path[1:]
-        print(self.path)
-        if self.path in self.server.static_content:
-            self.server.static_content[self.path](self)
+        path = unquote(self.path)
+        if path.startswith('/'): path = path[1:]
+        if path in self.server.static_content:
+            self.server.static_content[path](self)
         else:
             try:
-                self._lookup(self.server.sentences[self.path])
+                self._lookup(self.server.sentences[path])
             except KeyError:
-                if self.path:
+                if path:
                     self._not_found()
                 else:
                     self._current()
@@ -70,18 +74,22 @@ class Handler(BaseHTTPRequestHandler):
         start, end, sentence = data
         self.send(self.server._format('''
 <p class="sentence">{sentence!s}</p>
-<p class="date"><span class="epoch">{start!s}</span> - <span class="epoch">{end!s}</span></p>
+<p class="date"><span class="epoch">{start!s}</span> &mdash; <span class="epoch">{end!s}</span>.</p>
 ''', start=start, end=end, sentence=sentence, title='Timestamp lookup'))
 
     def _current(self):
+        sentence=self.server.sentences.current_sentence()
         self.send(self.server._format('''
-<p class="sentence"><a href="./{sentence!s}">{sentence!s}</a></p>
-''', sentence=self.server.sentences.current_sentence(), title='Current timestamp'))
+<p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
+''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
 
     def _not_found(self):
         self.send_response_only(404)
 
 
 if __name__ == '__main__':
+    chdir('/home/andrew/project/wordstamp/git/static')
+    static = HTTPServer(('0.0.0.0', 8081), SimpleHTTPRequestHandler)
+    Thread(target=static.serve_forever).start()
     words = Words()
-    Server(8080, Sentences([(123456, words.sentence())]), 'file:///home/andrew/project/wordstamp/git/static')
+    Server(8080, Sentences([(123456, words.sentence())]), 'http://localhost:8081')
