@@ -2,6 +2,7 @@
 from time import time
 from Crypto.Hash import SHA256
 from Crypto.Random.random import randint
+from collections import OrderedDict
 from re import compile
 from threading import Lock
 
@@ -17,17 +18,18 @@ PERIOD = 50000
 def hash_sha_256(sentence):
     return SHA256.new(sentence.encode('utf8')).digest()
 
-def key(sentence):
+def normalize(sentence):
     single_spaced = SEPARATORS.sub(' ', sentence.strip().lower())
-    letters_and_spaces = NON_LETTERS.sub('', single_spaced)
-    return hash_sha_256(letters_and_spaces)
+    return NON_LETTERS.sub('', single_spaced)
+
+def key(sentence):
+    return hash_sha_256(normalize(sentence))
 
 
-class Sentences:
+class Sentences: # CHANGE TO ORDERED DICT
 
-    def __init__(self, shuttle, hash=hash_sha_256):
+    def __init__(self, shuttle):
         self._shuttle = shuttle
-        self._hash = hash
         (self._previous, self._sentences) = self._read()
         self._calculate_next_epoch()
 
@@ -37,8 +39,8 @@ class Sentences:
         previous = extended[-1] if extended else (None, None)
         extended.append((None, None))
         return previous, \
-               {key(sentence): (start, end, sentence)
-                for ((start, sentence), (end, _)) in zip(extended, extended[1:])}
+               OrderedDict((key(sentence), (start, end, sentence))
+                   for ((start, sentence), (end, _)) in zip(extended, extended[1:]))
 
     def __contains__(self, item):
         return item in self._sentences
@@ -50,10 +52,7 @@ class Sentences:
         return self._sentences[item]
 
     def __reversed__(self):
-        '''This is incomplete - it returns only the last key.  It is provided
-        so that the current value can be found in server via the OrderedDict
-        interface.'''
-        yield key(self._previous[1])
+        return reversed(self._sentences)
 
     @synchronized(WRITE_LOCK)
     def add(self, sentence):
@@ -73,4 +72,3 @@ class Sentences:
 
     def next_epoch(self):
         return self._next_epoch
-

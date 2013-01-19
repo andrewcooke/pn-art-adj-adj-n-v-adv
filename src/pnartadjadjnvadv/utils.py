@@ -28,3 +28,6 @@ def synchronized(lock):
 def latest(container):
     for entry in reversed(container):
         return entry
+
+def latest_dict(dict):
+    return dict[latest(dict)]

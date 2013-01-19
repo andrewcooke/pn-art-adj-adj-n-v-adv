@@ -6,7 +6,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHan
 from threading import Thread
 
 from pnartadjadjnvadv.sentences import Sentences, PERIOD, key
-from pnartadjadjnvadv.utils import latest
+from pnartadjadjnvadv.utils import latest_dict
 from pnartadjadjnvadv.words import Words
 
 
@@ -91,7 +91,7 @@ class Handler(BaseHTTPRequestHandler):
 ''', start=start, end=end, sentence=sentence, title='Timestamp lookup'))
 
     def _current(self):
-        sentence = self.server.sentences[latest(self.server.sentences)][2]
+        sentence = latest_dict(self.server.sentences)[2]
         self.send(self.server._format('''
 <p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
 ''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
