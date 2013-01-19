@@ -24,3 +24,7 @@ def synchronized(lock):
             finally: lock.release()
         return wrapper
     return decorator
+
+def latest(container):
+    for entry in reversed(container):
+        return entry

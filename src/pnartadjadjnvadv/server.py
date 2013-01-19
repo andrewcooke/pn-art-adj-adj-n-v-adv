@@ -1,14 +1,26 @@
 
 from urllib.parse import quote, unquote
+from collections import OrderedDict
 from os import chdir
 from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHandler
 from threading import Thread
 
-from pnartadjadjnvadv.sentences import Sentences, PERIOD
+from pnartadjadjnvadv.sentences import Sentences, PERIOD, key
+from pnartadjadjnvadv.utils import latest
 from pnartadjadjnvadv.words import Words
 
 
 class Server(HTTPServer):
+
+    '''
+    This displays the information given in the OrderedDict sentences, which
+    maps from key(text) to (start, end, text).  The key function is defined
+    in the sentences module.
+
+    That is also the interface implemented by the Sentences() class, but we
+    use a "real" OrderedDict when the server is running in a separate process,
+    being fed new entries via a multiprocessing queue.
+    '''
 
     def __init__(self, port, sentences, static, test=False):
         self.sentences = sentences
@@ -20,11 +32,12 @@ class Server(HTTPServer):
     def _build_static(self):
         return {'about': self._static_page('''
 <p>From an <a href="http://rachelbythebay.com/w/2012/08/29/info/">idea</a> by Rachel Kroll.</p>
-<p>A new timestamp is generated approximately every {period:d} seconds, posted to
+<p>A new timestamp is generated every {period:d} seconds (roughly), posted to
 <a href="">Twitter</a>, and archived on
 <a href="">GitHub</a>.
 Sentences are selected from a pool 52 bits in size.</p>
-<p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.</p>
+<p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.
+Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available</a> under the AGPL3.</p>
 ''', title='About')}
 
     def _format(self, body, **kargs):
@@ -57,7 +70,7 @@ class Handler(BaseHTTPRequestHandler):
             self.server.static_content[path](self)
         else:
             try:
-                self._lookup(self.server.sentences[path])
+                self._lookup(self.server.sentences[key(path)])
             except KeyError:
                 if path:
                     self._not_found()
@@ -78,7 +91,7 @@ class Handler(BaseHTTPRequestHandler):
 ''', start=start, end=end, sentence=sentence, title='Timestamp lookup'))
 
     def _current(self):
-        sentence=self.server.sentences.current_sentence()
+        sentence = self.server.sentences[latest(self.server.sentences)][2]
         self.send(self.server._format('''
 <p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
 ''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
@@ -92,4 +105,6 @@ if __name__ == '__main__':
     static = HTTPServer(('0.0.0.0', 8081), SimpleHTTPRequestHandler)
     Thread(target=static.serve_forever).start()
     words = Words()
-    Server(8080, Sentences([(123456, words.sentence())]), 'http://localhost:8081')
+    sentence = words.sentence()
+#    Server(8080, OrderedDict([(key(sentence), (123456, None, sentence))]), 'http://localhost:8081')
+    Server(8080, Sentences([(123456, sentence)]), 'http://localhost:8081')
