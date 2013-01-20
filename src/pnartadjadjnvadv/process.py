@@ -37,6 +37,6 @@ def server_process(port, static, new_sentences):
 
 
 if __name__ == '__main__':
-    test_static()
-    run('/tmp/foo', 8080, TEST_URL)
+#    test_static()
+    run('/home/acooke/webapps/colorlessgreen/sentences.txt', 17492, 'http://acooke.org/cg/static')
 
