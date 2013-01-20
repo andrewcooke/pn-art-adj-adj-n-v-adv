@@ -42,7 +42,7 @@ class Server(HTTPServer):
 <p>From an <a href="http://rachelbythebay.com/w/2012/08/29/info/">idea</a> by Rachel Kroll.</p>
 <p>A new timestamp is generated every {period:d} seconds (roughly), posted to
 <a href="">Twitter</a>, and archived on
-<a href="">GitHub</a>.
+<a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv/blob/master/sentences.txt">GitHub</a>.
 Sentences are selected from a pool ~50 bits in size.</p>
 <p>Dates are displayed in your browser's timezone.</p>
 <p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.
