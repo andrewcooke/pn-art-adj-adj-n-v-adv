@@ -34,7 +34,7 @@ class Sentences:
         data.sort(key=itemgetter(0))
         data.append((None, None))
         for (start, sentence), (end, _) in zip(data, data[1:]):
-            self.__last = end
+            self.__last = start
             write(False, start, sentence)
             self.__known.add(key(sentence))
 
