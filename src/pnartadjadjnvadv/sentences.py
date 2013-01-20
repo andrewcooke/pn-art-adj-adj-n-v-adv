@@ -9,8 +9,7 @@ from threading import Lock
 WRITE_LOCK = Lock()
 NON_LETTERS = compile(r'[^a-z\s]+')
 SEPARATORS = compile(r'[-\s]+')
-#PERIOD = 50000
-PERIOD = 10
+PERIOD = 50000
 
 
 def hash_sha_256(sentence):
