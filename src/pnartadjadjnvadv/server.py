@@ -17,20 +17,23 @@ class Server(HTTPServer):
     maps from key(text) to (start, end, text).  The key function is defined
     in the sentences module.
 
-    That is also the interface implemented by the Sentences() class, but we
-    use a "real" OrderedDict when the server is running in a separate process,
-    being fed new entries via a multiprocessing queue.
+    The entries should be ordered by time, with the latest (end=None) last.
+    It is some other component's responsibility to update the ordered dict
+    correctly (but note that to update the end time of the 'previous' value
+    it is probably going to need to store the tripe as a list, not a tuple).
     '''
 
-    def __init__(self, port, sentences, static, test=False):
+    def __init__(self, port, sentences, static):
         self.sentences = sentences
-        self._static = static
+        self.__static = static
         self.static_content = self._build_static()
         super().__init__(('0.0.0.0', port), Handler)
+
+    def __call__(self, test=False):
         self.serve_forever(poll_interval=0.5 if test else 60)
 
     def _build_static(self):
-        return {'about': self._static_page('''
+        return {'about': self.__static_page('''
 <p>From an <a href="http://rachelbythebay.com/w/2012/08/29/info/">idea</a> by Rachel Kroll.</p>
 <p>A new timestamp is generated every {period:d} seconds (roughly), posted to
 <a href="">Twitter</a>, and archived on
@@ -40,9 +43,9 @@ Sentences are selected from a pool 52 bits in size.</p>
 Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available</a> under the AGPL3.</p>
 ''', title='About')}
 
-    def _format(self, body, **kargs):
+    def format(self, body, **kargs):
         substitution = dict(kargs)
-        substitution.update(static=self._static, period=PERIOD)
+        substitution.update(static=self.__static, period=PERIOD)
         return ('''<!DOCTYPE html>
 <html>
 <head>
@@ -56,8 +59,8 @@ Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available
 %s
 </body>''' % body).format(**substitution)
 
-    def _static_page(self, body, **kargs):
-        message = self._format(body, **kargs)
+    def __static_page(self, body, **kargs):
+        message = self.format(body, **kargs)
         return lambda handler: handler.send(message)
 
 
@@ -85,14 +88,15 @@ class Handler(BaseHTTPRequestHandler):
 
     def _lookup(self, data):
         start, end, sentence = data
-        self.send(self.server._format('''
+        self.send(self.server.format('''
 <p class="sentence">{sentence!s}</p>
 <p class="date"><span class="epoch">{start!s}</span> &mdash; <span class="epoch">{end!s}</span>.</p>
 ''', start=start, end=end, sentence=sentence, title='Timestamp lookup'))
 
     def _current(self):
-        sentence = latest_dict(self.server.sentences)[2]
-        self.send(self.server._format('''
+        start, end, sentence = latest_dict(self.server.sentences)
+        if end: self._not_found() # current should have an open endpoint
+        self.send(self.server.format('''
 <p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
 ''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
 
@@ -106,5 +110,4 @@ if __name__ == '__main__':
     Thread(target=static.serve_forever).start()
     words = Words()
     sentence = words.sentence()
-#    Server(8080, OrderedDict([(key(sentence), (123456, None, sentence))]), 'http://localhost:8081')
-    Server(8080, Sentences([(123456, sentence)]), 'http://localhost:8081')
+    Server(8080, OrderedDict([(key(sentence), (123456, None, sentence))]), 'http://localhost:8081')()
