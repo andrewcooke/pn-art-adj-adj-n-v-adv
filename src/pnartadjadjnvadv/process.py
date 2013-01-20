@@ -11,9 +11,7 @@ from pnartadjadjnvadv.words import Words
 def run(path, port, static):
     new_sentences = Queue()
     Process(target=sentence_process, args=(path, new_sentences)).start()
-    p = Process(target=server_process, args=(port, static, new_sentences))
-    p.start()
-    p.join()
+    Process(target=server_process, args=(port, static, new_sentences)).start()
 
 
 def sentence_process(path, new_sentences):
