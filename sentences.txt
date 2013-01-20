@@ -4,15 +4,10 @@
 
 # the epoch is the time at which the sentence was created.  obviously there
 # may be some delay before it is visible.  sentences 'end' when the next one
-# is created.  the gap is typically of order 10 seconds, but is not
+# is created.  the gap is typically of order 50000 seconds, but is not
 # guaranteed (there is a random - stochastic - component as well as the
 # possibility of service downtimes, etc).
 
 # blank lines and those starting with a # are comments.
 
-1358714629 Gladys the distinguished viridian loris underestimates financially.
-1358714636 Olenka the individual yellow blackbird ascends entirely.
-1358714651 Lizzy the advanced amber butterflyfish prescribes manually.
-1358714661 Sid the numeric lilac sturgeon combines slowly.
-1358718365 Zabrina the moving champagne snakehead throws mildly.
-1358718372 Sebastian the striking purple squirrelfish restarts eagerly.
+1358718779 Francoise the appointed apricot pumpkinseed prepares comparatively.
