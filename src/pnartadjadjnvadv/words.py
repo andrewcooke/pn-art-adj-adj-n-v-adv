@@ -23,7 +23,7 @@ class Words:
     @to_list
     def _read(self, name):
         try:
-            for line in resource_stream('__main__', 'distinct-%s' % name):
+            for line in resource_stream('__main__', name):
                 yield line.strip()
         except IOError:
             with open(join(dirname(dirname(dirname(__file__))), 'distinct-%s' % name)) as input:
