@@ -43,7 +43,7 @@ class GitFile:
         try:
             self.__git.add(self.__path)
             self.__git.commit(self.__path, m='new sentence')
-            self.__git.push(self.__path)
+            self.__git.push()
         except GitException as e:
             print(e)
 

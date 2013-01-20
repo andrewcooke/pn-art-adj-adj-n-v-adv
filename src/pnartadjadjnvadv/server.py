@@ -43,7 +43,8 @@ class Server(HTTPServer):
 <p>A new timestamp is generated every {period:d} seconds (roughly), posted to
 <a href="">Twitter</a>, and archived on
 <a href="">GitHub</a>.
-Sentences are selected from a pool 52 bits in size.</p>
+Sentences are selected from a pool ~50 bits in size.</p>
+<p>Dates are displayed in your browser's timezone.</p>
 <p>(c) 2013 <a href="http://www.acooke.org">Andrew Cooke</a>.
 Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available</a> under the AGPL3.</p>
 ''', title='About')}
