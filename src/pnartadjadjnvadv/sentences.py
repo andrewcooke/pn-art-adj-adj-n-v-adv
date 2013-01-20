@@ -9,7 +9,8 @@ from threading import Lock
 WRITE_LOCK = Lock()
 NON_LETTERS = compile(r'[^a-z\s]+')
 SEPARATORS = compile(r'[-\s]+')
-PERIOD = 50000
+#PERIOD = 50000
+PERIOD = 10
 
 
 def hash_sha_256(sentence):
@@ -31,7 +32,7 @@ class Sentences:
         self.__known = set()
         self.__last = None
         data = list(read())
-        data.sort(itemgetter(0))
+        data.sort(key=itemgetter(0))
         data.append((None, None))
         for (start, sentence), (end, _) in zip(data, data[1:]):
             self.__last = end
@@ -47,7 +48,8 @@ class Sentences:
     def __wait_until(self, epoch):
         now = time()
         while epoch > now:
-            sleep(max(0, now - epoch))
+            print('waiting til %d (%ds)' % (epoch, epoch - now))
+            sleep(max(0, epoch - now))
             now = time()
         return now
 

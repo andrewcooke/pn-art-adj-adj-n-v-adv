@@ -18,16 +18,21 @@ class Server(HTTPServer):
     in the sentences module.
 
     The entries should be ordered by time, with the latest (end=None) last.
-    It is some other component's responsibility to update the ordered dict
-    correctly (but note that to update the end time of the 'previous' value
-    it is probably going to need to store the tripe as a list, not a tuple).
+
+    The ordered dict is modified by the update function (note that to update
+    the end time of the 'previous' value it is probably going to need to store
+    the tripe as a list, not a tuple).
     '''
 
-    def __init__(self, port, sentences, static):
-        self.sentences = sentences
+    def __init__(self, port, static, sentences=OrderedDict(), update=lambda x: x):
         self.__static = static
+        self.sentences = sentences
+        self.__update = update
         self.static_content = self._build_static()
         super().__init__(('0.0.0.0', port), Handler)
+
+    def update(self):
+        self.sentences = self.__update(self.sentences)
 
     def __call__(self, test=False):
         self.serve_forever(poll_interval=0.5 if test else 60)
@@ -72,6 +77,7 @@ class Handler(BaseHTTPRequestHandler):
         if path in self.server.static_content:
             self.server.static_content[path](self)
         else:
+            self.server.update()
             try:
                 self._lookup(self.server.sentences[key(path)])
             except KeyError:
@@ -104,10 +110,16 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response_only(404)
 
 
-if __name__ == '__main__':
+TEST_URL = 'http://localhost:8081'
+
+def test_static():
     chdir('/home/andrew/project/wordstamp/git/static')
     static = HTTPServer(('0.0.0.0', 8081), SimpleHTTPRequestHandler)
     Thread(target=static.serve_forever).start()
+
+
+if __name__ == '__main__':
+    test_static()
     words = Words()
     sentence = words.sentence()
-    Server(8080, OrderedDict([(key(sentence), (123456, None, sentence))]), 'http://localhost:8081')()
+    Server(8080, TEST_URL, OrderedDict([(key(sentence), (123456, None, sentence))]))()

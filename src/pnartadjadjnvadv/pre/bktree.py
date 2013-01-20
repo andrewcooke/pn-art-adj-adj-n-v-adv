@@ -1,7 +1,7 @@
 
 import gc
 
-from pnartadjadjnvadv.fastcomp import compare
+from pnartadjadjnvadv.pre.fastcomp import compare
 
 
 def adapter(a, b):

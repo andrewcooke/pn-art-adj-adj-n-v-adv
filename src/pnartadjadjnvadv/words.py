@@ -26,7 +26,7 @@ class Words:
             for line in resource_stream('__main__', name):
                 yield line.strip()
         except IOError:
-            with open(join(dirname(dirname(dirname(__file__))), 'distinct-%s' % name)) as input:
+            with open(join(dirname(dirname(dirname(__file__))), name)) as input:
                 for line in input:
                     yield line.strip()
 

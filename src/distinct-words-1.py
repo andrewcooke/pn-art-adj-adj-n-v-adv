@@ -3,7 +3,7 @@
 import fileinput
 import sys
 
-from pnartadjadjnvadv.bktree import BKtree
+from pnartadjadjnvadv.pre.bktree import BKtree
 
 sys.setrecursionlimit(10000)
 

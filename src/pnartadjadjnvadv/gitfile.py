@@ -1,7 +1,7 @@
 
-from os.path import dirname
+from os.path import dirname, exists
 
-from brigit import Git
+from brigit import Git, GitException
 
 from pnartadjadjnvadv.sentences import PERIOD
 
@@ -14,13 +14,14 @@ class GitFile:
         self.__git = Git(dirname(path))
 
     def read(self):
-        with open(self.__path, 'r') as input:
-            for line in input:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    epoch, sentence = line.split(1)
-                    yield int(epoch), sentence
-                self.__new = False
+        if exists(self.__path):
+            with open(self.__path, 'r') as input:
+                for line in input:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        epoch, sentence = line.split(' ', 1)
+                        yield int(epoch), sentence
+                    self.__new = False
 
     def __header(self):
         with open(self.__path, 'w') as output:
@@ -39,15 +40,19 @@ class GitFile:
 ''' % PERIOD)
 
     def __push(self):
-        self.__git.add(self.__path)
-        self.__git.commit(self.__path, m='new sentence')
-        self.__git.push(self.__path)
+        try:
+            self.__git.add(self.__path)
+            self.__git.commit(self.__path, m='new sentence')
+            self.__git.push(self.__path)
+        except GitException as e:
+            print(e)
 
     def write(self, append, epoch, sentence):
         if self.__new:
             self.__header()
+            self.__push()
             self.__new = False
         if append:
             with open(self.__path, 'a') as output:
                 output.write("%d %s\n" % (epoch, sentence))
-        self.__push()
+            self.__push()
