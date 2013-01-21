@@ -1,0 +1,12 @@
+
+# each non-comment line contains a unix epoch, followed by a sentence,
+# encoded in ascii, and terminated by a newline character (unix style).
+
+# the epoch is the time at which the sentence was created.  obviously there
+# may be some delay before it is visible.  sentences 'end' when the next one
+# is created.  the gap is typically of order 50000 seconds, but is not
+# guaranteed (there is a random - stochastic - component as well as the
+# possibility of service downtimes, etc).
+
+# blank lines and those starting with a # are comments.
+
