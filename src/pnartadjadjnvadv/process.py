@@ -41,5 +41,6 @@ def server_process(port, static, new_sentences):
 
 if __name__ == '__main__':
 #    test_static()
-    run('/home/acooke/webapps/colorlessgreen/sentences.txt', 17492, 'http://acooke.org/cg/static')
+    run('/home/acooke/webapps/colorlessgreen/sentences.txt',
+        '/home/acooke/twitter', 17492, 'http://acooke.org/cg/static')
 

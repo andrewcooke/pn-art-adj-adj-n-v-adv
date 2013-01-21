@@ -41,7 +41,7 @@ class Server(HTTPServer):
         return {'about': self.__static_page('''
 <p>From an <a href="http://rachelbythebay.com/w/2012/08/29/info/">idea</a> by R. Kroll.</p>
 <p>A new timestamp is generated every {period:d} seconds (roughly), posted to
-<a href="">Twitter</a>, and archived on
+<a href="https://twitter.com/ColorlessG">Twitter</a>, and archived on
 <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv/blob/master/sentences.txt">GitHub</a>.
 Sentences are selected from a pool ~50 bits in size.</p>
 <p>Dates are displayed in your browser's timezone.</p>
