@@ -4,6 +4,7 @@ from os.path import dirname, exists
 from brigit import Git, GitException
 
 from pnartadjadjnvadv.sentences import PERIOD
+from pnartadjadjnvadv.utils import eprint
 
 
 class GitFile:
@@ -45,7 +46,7 @@ class GitFile:
             self.__git.commit(self.__path, m='new sentence')
             self.__git.push()
         except GitException as e:
-            print(e)
+            eprint(e)
 
     def write(self, append, epoch, sentence):
         if self.__new:

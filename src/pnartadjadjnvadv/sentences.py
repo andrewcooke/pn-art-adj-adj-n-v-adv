@@ -2,6 +2,7 @@ from operator import itemgetter
 from time import time, sleep
 from Crypto.Hash import SHA256
 from Crypto.Random.random import randint
+from pnartadjadjnvadv.utils import eprint
 from re import compile
 from threading import Lock
 
@@ -10,6 +11,7 @@ WRITE_LOCK = Lock()
 NON_LETTERS = compile(r'[^a-z\s]+')
 SEPARATORS = compile(r'[-\s]+')
 PERIOD = 50000
+#PERIOD = 5
 
 
 def hash_sha_256(sentence):
@@ -47,7 +49,7 @@ class Sentences:
     def __wait_until(self, epoch):
         now = time()
         while epoch > now:
-            print('waiting til %d (%ds)' % (epoch, epoch - now))
+            eprint('waiting til %d (%ds)' % (epoch, epoch - now))
             sleep(max(0, epoch - now))
             now = time()
         return now

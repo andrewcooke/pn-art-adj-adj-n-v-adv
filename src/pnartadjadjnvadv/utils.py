@@ -1,5 +1,6 @@
 
 from functools import wraps
+from sys import stderr
 
 
 def to_list(func):
@@ -31,3 +32,6 @@ def latest(container):
 
 def latest_dict(dict):
     return dict[latest(dict)]
+
+def eprint(text):
+    print(text, file=stderr)

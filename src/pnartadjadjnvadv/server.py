@@ -108,7 +108,7 @@ class Handler(BaseHTTPRequestHandler):
 ''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
 
     def _not_found(self):
-        self.send_response_only(404)
+        self.send_error(404)
 
 
 TEST_URL = 'http://localhost:8081'

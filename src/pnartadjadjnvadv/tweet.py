@@ -1,11 +1,11 @@
-
+from pnartadjadjnvadv.utils import eprint
 from twitter import OAuth, Twitter
 
 
 class Tweet:
 
     def __init__(self, path):
-        self.__twitter = Twitter(auth=self.__oauth(path))
+        self.__twitter = Twitter(auth=self.__oauth(path)) if path else None
 
     def __oauth(self, path):
         with open(path, 'r') as input:
@@ -15,8 +15,11 @@ class Tweet:
 
     def write(self, append, epoch, sentence):
         if append:
-            try: self.__twitter.statuses.update(status=sentence)
-            except Exception as e: print(e)
+            if self.__twitter:
+                try: self.__twitter.statuses.update(status=sentence)
+                except Exception as e: eprint(e)
+            else:
+                eprint('Dummy twitter: %s' % sentence)
 
 
 if __name__ == '__main__':
