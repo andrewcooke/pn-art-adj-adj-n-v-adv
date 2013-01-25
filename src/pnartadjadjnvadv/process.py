@@ -1,11 +1,10 @@
 
-
 from multiprocessing import Queue, Process
 from time import sleep
 
 from pnartadjadjnvadv.gitfile import GitFile
 from pnartadjadjnvadv.sentences import Sentences, key
-from pnartadjadjnvadv.server import Server, test_static, TEST_URL
+from pnartadjadjnvadv.server import Server
 from pnartadjadjnvadv.tweet import Tweet
 from pnartadjadjnvadv.utils import latest, eprint
 from pnartadjadjnvadv.words import Words
@@ -15,7 +14,7 @@ def run(path, twitter, port, static):
     new_sentences = Queue()
     targets = (sentence_process, server_process)
     args = ((path, twitter, new_sentences), (port, static, new_sentences))
-    processes = ([None], [None])
+    processes = ([None], [None])  # mutable 'pointers'
     while True:
         for target, arg, process in zip(targets, args, processes):
             if not process[0] or not process[0].is_alive():
@@ -41,10 +40,9 @@ def server_process(port, static, new_sentences):
             epoch, sentence = new_sentences.get()
             if sentences:
                 previous = latest(sentences)
-                sentences[previous][1] = epoch
+                sentences[previous][1] = epoch  # mutate end
             eprint('%d: %s' % (epoch, sentence))
-            k = key(sentence)
-            sentences[k] = [epoch, None, sentence]
+            sentences[key(sentence)] = [epoch, None, sentence]  # mutable end
         return sentences
     Server(port, static, update=update)()
 

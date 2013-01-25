@@ -5,7 +5,7 @@ from os import chdir
 from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHandler
 from threading import Thread
 
-from pnartadjadjnvadv.sentences import Sentences, PERIOD, key
+from pnartadjadjnvadv.sentences import PERIOD, key
 from pnartadjadjnvadv.utils import latest_dict
 from pnartadjadjnvadv.words import Words
 
@@ -102,8 +102,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def _current(self):
         start, end, sentence = latest_dict(self.server.sentences)
-        if end: self._not_found() # current should have an open endpoint
-        self.send(self.server.format('''
+        if end: self._not_found()  # current should have an open endpoint
+        else: self.send(self.server.format('''
 <p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
 ''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
 

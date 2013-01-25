@@ -1,13 +1,12 @@
+
 from operator import itemgetter
 from time import time, sleep
 from Crypto.Hash import SHA256
 from Crypto.Random.random import randint
 from pnartadjadjnvadv.utils import eprint
 from re import compile
-from threading import Lock
 
 
-WRITE_LOCK = Lock()
 NON_LETTERS = compile(r'[^a-z\s]+')
 SEPARATORS = compile(r'[-\s]+')
 PERIOD = 50000
