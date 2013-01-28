@@ -78,8 +78,7 @@ Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available
 </body>''' % body).format(**substitution)
 
     def __static_page(self, body, **kargs):
-        message = self.format(body, **kargs)
-        return lambda handler: handler.send(message)
+        return lambda handler: handler.send(self.format(body, **kargs))
 
 
 class Handler(BaseHTTPRequestHandler):
