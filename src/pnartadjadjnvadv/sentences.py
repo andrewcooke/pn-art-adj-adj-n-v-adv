@@ -51,7 +51,7 @@ class Sentences:
             eprint('waiting til %d (%ds)' % (epoch, epoch - now))
             sleep(max(0, epoch - now))
             now = time()
-        return now
+        return int(now)
 
     def __unique_sentence(self):
         while True:
