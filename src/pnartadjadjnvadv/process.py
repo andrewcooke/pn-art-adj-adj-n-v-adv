@@ -4,7 +4,7 @@ from time import sleep
 
 from pnartadjadjnvadv.gitfile import GitFile
 from pnartadjadjnvadv.sentences import Sentences, key
-from pnartadjadjnvadv.server import Server
+from pnartadjadjnvadv.server import Server, repeat_text
 from pnartadjadjnvadv.tweet import Tweet
 from pnartadjadjnvadv.utils import latest, eprint
 from pnartadjadjnvadv.words import Words
@@ -35,7 +35,7 @@ def sentence_process(path, twitter, new_sentences):
 
 
 def server_process(port, static, new_sentences):
-    def update(sentences):
+    def update(texts, sentences):
         while not new_sentences.empty():
             epoch, sentence = new_sentences.get()
             if sentences:
@@ -43,7 +43,9 @@ def server_process(port, static, new_sentences):
                 sentences[previous][1] = epoch  # mutate end
             eprint('%d: %s' % (epoch, sentence))
             sentences[key(sentence)] = [epoch, None, sentence]  # mutable end
-        return sentences
+            texts = None # flag to reset below
+        if not texts: texts = repeat_text(sentences)
+        return texts, sentences
     Server(port, static, update=update)()
 
 

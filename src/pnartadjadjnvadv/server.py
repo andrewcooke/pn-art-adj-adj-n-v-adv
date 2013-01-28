@@ -1,5 +1,5 @@
 
-from urllib.parse import quote, unquote
+from urllib.parse import unquote_plus, quote_plus
 from collections import OrderedDict
 from os import chdir
 from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHandler
@@ -8,6 +8,15 @@ from threading import Thread
 from pnartadjadjnvadv.sentences import PERIOD, key
 from pnartadjadjnvadv.utils import latest_dict
 from pnartadjadjnvadv.words import Words
+
+
+def repeat_text(sentences):
+    while True:
+        if sentences:
+            for triple in sentences.values():
+                yield triple[2]
+        else:
+            yield ''
 
 
 class Server(HTTPServer):
@@ -24,15 +33,16 @@ class Server(HTTPServer):
     the tripe as a list, not a tuple).
     '''
 
-    def __init__(self, port, static, sentences=OrderedDict(), update=lambda x: x):
+    def __init__(self, port, static, sentences=OrderedDict(), update=lambda x, y: (x, y)):
         self.__static = static
         self.sentences = sentences
+        self.__texts = repeat_text(sentences)
         self.__update = update
         self.static_content = self._build_static()
         super().__init__(('0.0.0.0', port), Handler)
 
     def update(self):
-        self.sentences = self.__update(self.sentences)
+        self.__texts, self.sentences = self.__update(self.__texts, self.sentences)
 
     def __call__(self, test=False):
         self.serve_forever(poll_interval=0.5 if test else 60)
@@ -51,7 +61,7 @@ Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available
 
     def format(self, body, **kargs):
         substitution = dict(kargs)
-        substitution.update(static=self.__static, period=PERIOD)
+        substitution.update(static=self.__static, period=PERIOD, previous=next(self.__texts))
         return ('''<!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +71,9 @@ Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available
 <script type="text/javascript" src="{static!s}/epoch.js"></script>
 </head>
 <body>
-<p class="links"><a href="./about">about</a> | <a href="./">current</a></p>
+<form action="./"><p class="links"><a href="./about">about</a> | <a href="./">current</a>
+<span class="right"><input name="q" value="{previous!s}"/><button>lookup</button></span>
+</p></form>
 %s
 </body>''' % body).format(**substitution)
 
@@ -73,12 +85,14 @@ Source <a href="https://github.com/andrewcooke/pn-art-adj-adj-n-v-adv">available
 class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        path = unquote(self.path)
+        path = unquote_plus(self.path)
         if path.startswith('/'): path = path[1:]
         if path in self.server.static_content:
             self.server.static_content[path](self)
         else:
             self.server.update()
+            if path.startswith('?q='): path = path[len('?q='):]
+            print('***', path)
             try:
                 self._lookup(self.server.sentences[key(path)])
             except KeyError:
@@ -104,8 +118,8 @@ class Handler(BaseHTTPRequestHandler):
         start, end, sentence = latest_dict(self.server.sentences)
         if end: self._not_found()  # current should have an open endpoint
         else: self.send(self.server.format('''
-<p class="sentence"><a href="./{encoded!s}">{sentence!s}</a></p>
-''', sentence=sentence, encoded=quote(sentence), title='Current timestamp'))
+<p class="sentence"><a href="./?q={encoded!s}">{sentence!s}</a></p>
+''', sentence=sentence, encoded=quote_plus(sentence), title='Current timestamp'))
 
     def _not_found(self):
         self.send_error(404)
